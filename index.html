@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBV Films - Táo Bắc Việt Team</title>
+    <link rel="icon" type="image/png" href="https://cdn.phototourl.com/free/2026-06-20-996f44ac-48ad-49c7-8de0-03177851292b.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9', // Xanh nước biển nhạt chủ đạo
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        darkbg: {
+                            900: '#030712', // Đen sâu thẳm
+                            800: '#0b1528', // Xanh đen đậm
+                            700: '#111e36', // Xanh đen vừa
+                            600: '#1e2d4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+        }
+        /* Tối ưu thanh cuộn với màu xanh nước biển */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2d4a;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+    </style>
+</head>
+<body class="text-gray-100 min-h-screen flex flex-col selection:bg-brand-500/30 selection:text-brand-200">
+
+    <header class="sticky top-0 z-40 bg-darkbg-900/90 backdrop-blur-md border-b border-gray-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <a href="#" onclick="showPage('home')" class="flex items-center space-x-3 group">
+                <div class="bg-gradient-to-tr from-brand-600 to-brand-400 p-2.5 rounded-xl shadow-lg shadow-brand-500/20 transform group-hover:rotate-6 transition-all duration-300">
+                    <i class="fa-solid fa-clapperboard text-xl text-white"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-200">TBV</span>
+                    <span class="text-white text-lg font-bold ml-1 tracking-widest">FILMS</span>
+                    <p class="text-[9px] text-brand-300 font-bold tracking-widest -mt-1 uppercase">Táo Bắc Việt Team</p>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
+                <a href="#" onclick="showPage('home')" class="nav-link text-brand-400 hover:text-brand-300 transition-colors">Trang Chủ</a>
+                <a href="#" onclick="showPage('genres')" class="nav-link text-gray-300 hover:text-brand-300 transition-colors">Bộ Sưu Tập</a>
+                <a href="#" onclick="showPage('reviews')" class="nav-link text-gray-300 hover:text-brand-300 transition-colors">Review Ngắn</a>
+                <a href="#" onclick="showPage('about')" class="nav-link text-gray-300 hover:text-brand-300 transition-colors">Về Chúng Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <div id="sync-indicator" class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Sheets Connected</span>
+                </div>
+
+                <div class="relative hidden md:block">
+                    <input type="text" id="searchInput" placeholder="Tìm tên phim, thể loại..." class="bg-darkbg-800 text-gray-200 pl-10 pr-4 py-2 rounded-lg text-xs border border-gray-700/60 focus:outline-none focus:border-brand-500 w-52 focus:w-64 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+                </div>
+                
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-brand-400 focus:outline-none p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-darkbg-900 border-b border-gray-800 px-4 pt-2 pb-6 space-y-2">
+            <input type="text" id="mobileSearchInput" placeholder="Tìm kiếm phim nhanh..." class="w-full bg-darkbg-800 text-gray-200 pl-10 pr-4 py-2.5 rounded-lg text-sm border border-gray-700 focus:outline-none focus:border-brand-500 mb-3">
+            <a href="#" onclick="showPage('home'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-white hover:bg-darkbg-800 hover:text-brand-400">Trang Chủ</a>
+            <a href="#" onclick="showPage('genres'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-300 hover:bg-darkbg-800 hover:text-brand-400">Bộ Sưu Tập Phim</a>
+            <a href="#" onclick="showPage('reviews'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-300 hover:bg-darkbg-800 hover:text-brand-400">Review Ngắn</a>
+            <a href="#" onclick="showPage('about'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-300 hover:bg-darkbg-800 hover:text-brand-400">Về Chúng Tôi</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <div id="global-loading" class="max-w-7xl mx-auto px-4 py-12 text-center text-brand-400 font-medium">
+            <i class="fa-solid fa-spinner animate-spin mr-2"></i> Đang đồng bộ hóa dữ liệu từ hệ thống lưu trữ...
+        </div>
+
+        <section id="page-home" class="page-content hidden">
+            <div class="relative h-[65vh] md:h-[75vh] w-full overflow-hidden flex items-center">
+                <div id="hero-banner-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1600&q=80');">
+                    <div class="absolute inset-0 bg-gradient-to-r from-darkbg-900 via-darkbg-900/80 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-darkbg-900 via-transparent to-darkbg-900/20"></div>
+                </div>
+
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+                    <div class="max-w-2xl">
+                        <h1 id="hero-title" class="text-4xl sm:text-6xl font-black text-white leading-tight mb-4 tracking-tight drop-shadow-md uppercase">
+                            HOẠT HÌNH BẮC VIỆT
+                        </h1>
+                        <p id="hero-desc" class="text-gray-300 text-sm sm:text-base mb-8 leading-relaxed max-w-xl">
+                            Những tác phẩm điện ảnh xuất sắc, giàu tính nghệ thuật và nội dung kịch tính từ Táo Bắc Việt Team. Đồng bộ trực tuyến cùng dữ liệu nội bộ của nhóm.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button id="hero-play-btn" class="flex items-center space-x-2.5 bg-gradient-to-r from-brand-500 to-sky-500 hover:from-brand-600 hover:to-sky-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-brand-500/20 transition-transform transform hover:-translate-y-1">
+                                <i class="fa-solid fa-play"></i>
+                                <span>Xem Ngay</span>
+                            </button>
+                            <button onclick="showPage('about')" class="flex items-center space-x-2 bg-darkbg-800/80 hover:bg-darkbg-700 text-white font-semibold px-6 py-3.5 rounded-xl border border-gray-700 backdrop-blur-sm transition-colors">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span>Giới thiệu</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-lg sm:text-xl font-bold uppercase tracking-wider border-l-4 border-brand-500 pl-3">Khám Phá Theo Thể Loại</h2>
+                </div>
+                <div class="flex space-x-3 overflow-x-auto pb-4" id="genre-pills"></div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-16">
+                
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-7 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"></div>
+                            <h2 class="text-xl font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400">
+                                <i class="fa-solid fa-fire-flame-curved mr-1 text-orange-500"></i> Đề Cử Xuất Sắc Nhất
+                            </h2>
+                        </div>
+                        <span class="text-[11px] text-gray-500 bg-darkbg-800 px-3 py-1 rounded-full border border-gray-800/60 hidden sm:inline">
+                            <i class="fa-solid fa-arrow-trend-up text-amber-500 mr-1"></i> Cập nhật theo Real-time Views
+                        </span>
+                    </div>
+                    <div id="trending-movies-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+                </div>
+
+                <div>
+                    <div id="movie-sections-container" class="space-y-12"></div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section id="page-genres" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="mb-8">
+                <h1 class="text-3xl font-black mb-2 text-white">Kho Phim <span class="text-brand-400">Táo Bắc Việt</span></h1>
+                <p class="text-gray-400 text-sm">Lọc và tìm kiếm các tác phẩm điện ảnh theo từng phân loại cụ thể</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-10" id="genre-grid-selector"></div>
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold" id="current-filtered-title">Tất Cả Phim</h2>
+                    <span class="text-xs bg-darkbg-800 text-brand-300 px-3 py-1 rounded-full border border-gray-800 font-semibold" id="movie-count">0 tác phẩm</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6" id="filtered-movies-grid"></div>
+            </div>
+        </section>
+
+        <section id="page-reviews" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <span class="text-brand-400 text-xs font-bold uppercase tracking-widest bg-brand-500/10 px-4 py-1.5 rounded-full border border-brand-500/20">Speedrun Movie</span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold mt-3 mb-4 text-white">Review Phim Ngắn <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-sky-300">& Tóm Tắt</span></h1>
+                <p class="text-gray-400 text-sm">Bản tóm tắt súc tích, hóm hỉnh và sâu sắc các thước phim nổi tiếng qua lăng kính cực hài hước của Táo Bắc Việt Team.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="reviews-grid"></div>
+        </section>
+
+        <section id="page-about" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-brand-400 font-bold uppercase text-xs tracking-widest">Sứ Mệnh & Đội Ngũ</span>
+                    <h1 class="text-4xl sm:text-5xl font-black text-white mt-2 mb-6 leading-tight">TÁO BẮC VIỆT TEAM<br><span class="text-brand-400">Kết Nối Đam Mê</span></h1>
+                    <p class="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base">
+                        Khởi đầu từ những người trẻ đam mê nghệ thuật kể chuyện bằng hình ảnh, Táo Bắc Việt Team đã không ngừng nỗ lực sản xuất và phát hành những thước phim hoạt hình, dã sử cổ trang, phim kinh dị và các chương trình review hài hước mang đậm dấu ấn sáng tạo riêng biệt.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed mb-8 text-sm sm:text-base">
+                        Hệ thống website có bộ phận Ban quản trị dày dặn giúp việc cập nhật tập phim mới gửi tới toàn thể quý khán giả.
+                    </p>
+                    <div class="grid grid-cols-3 gap-6 border-t border-gray-800 pt-8 mb-8">
+                        <div>
+                            <p class="text-3xl font-extrabold text-brand-400">10M+</p>
+                            <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-semibold">Lượt tiếp cận</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-sky-400">120+</p>
+                            <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-semibold">Dự án lớn nhỏ</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-emerald-400">24/7</p>
+                            <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-semibold">Đồng bộ phim</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="https://www.youtube.com/@T%C3%A1oB%E1%BA%AFcVi%E1%BB%87tTeam-z6f" target="_blank" class="w-11 h-11 rounded-xl bg-brand-600/10 hover:bg-brand-500 border border-brand-500/30 text-brand-400 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-youtube text-base"></i></a>
+                        <a href="https://www.facebook.com/taobacvietteam" target="_blank" class="w-11 h-11 rounded-xl bg-brand-600/10 hover:bg-brand-500 border border-brand-500/30 text-brand-400 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-facebook-f text-base"></i></a>
+                        <a href="https://www.tiktok.com/@taobacvietteam" target="_blank" class="w-11 h-11 rounded-xl bg-brand-600/10 hover:bg-brand-500 border border-brand-500/30 text-brand-400 hover:text-white flex items-center justify-center transition-all"><i class="fa-brands fa-tiktok text-base"></i></a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-600 to-sky-500 rounded-3xl blur opacity-25"></div>
+                    <div class="relative bg-darkbg-800 p-3 rounded-2xl border border-gray-800">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Đội ngũ Táo Bắc Việt" class="rounded-xl w-full h-[320px] object-cover">
+                        <div class="p-5">
+                            <h3 class="text-base font-bold text-white mb-1.5">Sáng tạo không biên giới</h3>
+                            <p class="text-xs text-gray-400">TBV Films cam kết phát triển những sản phẩm thuần Việt chất lượng vượt bậc, hướng đến tương lai chuyển đổi số điện ảnh.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-player" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <button onclick="goBack()" class="flex items-center space-x-2 text-gray-400 hover:text-brand-400 mb-6 transition-all group">
+                <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+                <span class="text-xs font-semibold">Trở Về Danh Sách</span>
+            </button>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-800 bg-black">
+                        <div id="video-frame" class="w-full h-full"></div>
+                    </div>
+                    <div class="bg-darkbg-800 p-6 rounded-2xl border border-gray-800/60">
+                        <div class="flex flex-wrap gap-2 mb-4" id="player-genres"></div>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white mb-3" id="player-title">Đang Tải Phim...</h1>
+                        <div class="flex flex-wrap items-center gap-6 text-xs text-gray-400 border-b border-gray-800/80 pb-4 mb-4">
+                            <span><i class="fa-solid fa-calendar-days mr-2 text-brand-400"></i>2026</span>
+                            <span><i class="fa-solid fa-film mr-2 text-brand-400"></i>Táo Bắc Việt Team</span>
+                            <span class="text-brand-300 font-bold" id="player-views"><i class="fa-solid fa-eye mr-2"></i>0 lượt xem</span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed" id="player-desc"></p>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h3 class="text-md font-bold uppercase tracking-wider border-l-4 border-brand-400 pl-3">Phim Liên Quan</h3>
+                    <div class="space-y-4" id="suggestions-container"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-darkbg-900 border-t border-gray-900/80 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-gradient-to-tr from-brand-600 to-brand-400 p-2 rounded-lg">
+                            <i class="fa-solid fa-clapperboard text-lg text-white"></i>
+                        </div>
+                        <span class="text-lg font-black tracking-wider text-white">TBV FILMS</span>
+                    </div>
+                    <p class="text-gray-400 text-xs max-w-sm mb-4 leading-relaxed">
+                        Thương hiệu giải trí, sản xuất phim độc lập chất lượng từ Táo Bắc Việt Team. Đem lại những phút giây thư giãn bổ ích, trọn vẹn giá trị tinh thần cho khán giả Việt.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-4">Chuyên Phân Mục</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-4">Kết Nối</h4>
+                    <p class="text-xs text-gray-400">Hợp tác: <span class="text-gray-300">taobacvietteam@gmail.com</span></p>
+                </div>
+            </div>
+            <div class="border-t border-gray-900/80 pt-8 text-center text-[11px] text-gray-500">
+                <p>&copy; 2026 TBV Films - Táo Bắc Việt Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
